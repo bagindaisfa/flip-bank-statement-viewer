@@ -135,6 +135,4 @@ npm run lint
 | GET     | `/balance`     | Get the total account balance (credits - debits for successful transactions) |
 | GET     | `/issues`      | Get a paginated list of non-successful transactions (FAILED and PENDING) |
 
-## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
