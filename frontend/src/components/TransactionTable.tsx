@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 type Txn = {
   timestamp: number;
   name: string;
