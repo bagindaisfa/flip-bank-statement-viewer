@@ -1,6 +1,6 @@
 # Bank Statement Viewer
 
-A full-stack application that allows users to upload bank statement files, view transaction history, and analyze transaction data with sorting and filtering capabilities.
+A full-stack application that allows users to upload bank statement files, view transaction history, and analyze transaction data with sorting capabilities.
 
 ## Features
 
@@ -20,9 +20,6 @@ A full-stack application that allows users to upload bank statement files, view 
 
 ### Backend
 - Go (Golang)
-- Gin web framework
-- GORM for database operations
-- SQLite for data storage
 
 ## Getting Started
 
@@ -103,14 +100,11 @@ A full-stack application that allows users to upload bank statement files, view 
 ### Backend
 - **Layered Architecture**: Follows a clean architecture pattern with clear separation of concerns.
 - **RESTful API**: Implements REST principles for API design.
-- **SQLite**: Chosen for its simplicity and zero-configuration requirements for development.
-- **Gin Framework**: Provides good performance and a clean API for routing and middleware.
 
 ## Environment Variables
 
 ### Backend
 - `PORT`: Port to run the server on (default: 8080)
-- `DB_PATH`: Path to SQLite database file (default: `./data/transactions.db`)
 
 ### Frontend
 - `VITE_API_BASE`: Base URL for API requests (default: `http://localhost:8080`)
@@ -132,6 +126,14 @@ go test ./...
 cd frontend
 npm run lint
 ```
+
+## API Endpoints
+
+| Method | Endpoint       | Description |
+|---------|----------------|-------------|
+| POST    | `/upload`      | Upload a CSV file containing transaction data |
+| GET     | `/balance`     | Get the total account balance (credits - debits for successful transactions) |
+| GET     | `/issues`      | Get a paginated list of non-successful transactions (FAILED and PENDING) |
 
 ## License
 
