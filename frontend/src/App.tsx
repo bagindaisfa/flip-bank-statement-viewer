@@ -75,7 +75,7 @@ function App() {
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
-      
+
       await fetchData(); // Refresh both balance and transactions
     } catch (error) {
       alert(error instanceof Error ? error.message : "Terjadi kesalahan saat upload");
@@ -106,7 +106,7 @@ function App() {
         <div className="card-header">
           <h2 className="card-title">Upload Statement</h2>
         </div>
-        <div className="flex gap-3 items-center">
+        <div className="flex gap-3 items-center flex-col-mobile">
           <input
             ref={fileInputRef}
             type="file"

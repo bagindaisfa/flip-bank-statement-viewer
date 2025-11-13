@@ -285,6 +285,17 @@ body {
   }
 }
 
+@media (max-width: 640px) {
+  .flex-col-mobile {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .flex-col-mobile button {
+    width: 100%;
+  }
+}
+
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
