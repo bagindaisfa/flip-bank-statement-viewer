@@ -1,35 +1,60 @@
 # Bank Statement Viewer
 
-A full-stack application that allows users to upload bank statement files, view transaction history, and analyze transaction data with sorting capabilities.
+A full-stack web application that allows users to upload and analyze bank statements, view transaction summaries, and inspect transaction issues - built with Go and React (TypeScript).
 
 ## Features
 
-- 📤 Upload bank statement files (CSV format)
-- 📊 View transaction history with sorting and pagination
-- 💰 Track account balance
-- 🚦 Transaction status tracking (Success, Pending, Failed)
-- 🎨 Clean, responsive UI with pure CSS
+- 📤 Upload CSV-based bank statements
+- 📊 View transaction history with pagination and sorting
+- 💰 Compute account balance (credits − debits for successful transactions)
+- 🚦 Detect transaction issues (Pending & Failed)
+- 🎨 Responsive, clean UI with pure CSS
+- 🧪 Unit testing for backend services
+- 🐳 Containerized with Docker Compose
+- ⚙️ CI/CD pipeline with GitHub Actions
 
 ## Tech Stack
 
 ### Frontend
-- React 19 with TypeScript
-- Vite for build tooling
-- Pure CSS (no UI frameworks)
-- React Hooks for state management
+- **Framework**: React 19 with TypeScript
+- **Build Tool**: Vite
+- **Styling**: Pure CSS (no UI frameworks)
 
 ### Backend
-- Go (Golang)
+- **Language**: Go 1.21+
+- **Web Framework**: Standard Library HTTP
+- **Testing**: Standard Library testing package
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ (for frontend)
-- Go 1.21+ (for backend)
-- Git
+- **Development**
+  - Node.js 18+ (for frontend development)
+  - Go 1.21+ (for backend development)
+  - Git
+  - Docker & Docker Compose (for containerized development and deployment)
 
-### Backend Setup
+### Quick Start with Docker Compose
+
+The easiest way to get started is using Docker Compose:
+
+```bash
+# Clone the repository
+git clone https://github.com/bagindaisfa/flip-bank-statement-viewer.git
+cd flip-bank-statement-viewer
+
+# Start the application
+docker-compose up --build
+```
+
+The application will be available at:
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:8080
+
+### Manual Setup
+
+#### Backend Setup
 
 1. Navigate to the backend directory:
    ```bash
@@ -47,7 +72,7 @@ A full-stack application that allows users to upload bank statement files, view 
    ```
    The backend will start on `http://localhost:8080` by default.
 
-### Frontend Setup
+#### Frontend Setup
 
 1. Navigate to the frontend directory:
    ```bash
@@ -75,7 +100,9 @@ A full-stack application that allows users to upload bank statement files, view 
 │   │   ├── handler/      # HTTP request handlers
 │   │   ├── models/       # Database models
 │   │   ├── repository/   # Data access layer
-│   │   └── service/      # Business logic
+│   │   ├── service/      # Business logic
+│   │   └── utils/        # Utility functions
+│   ├── Dockerfile        # Production Dockerfile
 │   └── go.mod           # Go module definition
 │
 ├── frontend/             # Frontend source code
@@ -84,55 +111,69 @@ A full-stack application that allows users to upload bank statement files, view 
 │   │   ├── components/   # Reusable UI components
 │   │   ├── App.tsx       # Main application component
 │   │   └── main.tsx      # Application entry point
+│   ├── Dockerfile        # Production Dockerfile
 │   └── package.json      # NPM dependencies
 │
-└── README.md             # This file
+├── .github/workflows/    # GitHub Actions workflows
+│   └── ci.yml           # CI/CD pipeline
+│
+├── docker-compose.yml    # Development and production compose file
+└── README.md            # This file
 ```
 
 ## Architecture Decisions
 
-### Frontend
-- **Component-Based Architecture**: The UI is built using React functional components with hooks for state management.
-- **Pure CSS**: Styling is implemented with pure CSS for better control and smaller bundle size.
-- **Type Safety**: TypeScript is used throughout the codebase for better developer experience and code quality.
-- **Responsive Design**: The application is designed to work on both desktop and mobile devices.
+### Frontend Architecture
+- **Component-Based**: Built with functional React components and hooks for state management
+- **Type Safety**: TypeScript for better developer experience and code quality
+- **Performance**: Code splitting and lazy loading with React.lazy and Suspense
+- **Responsive Design**: Mobile-first approach with pure CSS for better performance
+- **State Management**: Local component state for simplicity, with prop drilling for shared state
 
-### Backend
-- **Layered Architecture**: Follows a clean architecture pattern with clear separation of concerns.
-- **RESTful API**: Implements REST principles for API design.
+### Backend Architecture
+- **Layered Architecture**: Clear separation of concerns with handler, service, and repository layers
+- **RESTful API**: Follows REST principles with consistent response formats
+- **Error Handling**: Centralized error handling with appropriate HTTP status codes
+- **Input Validation**: Request validation at the handler level
+- **In-Memory Storage**: Simple in-memory storage for development, easily swappable with a database
+
+### CI/CD Pipeline
+- **Automated Testing**: Runs unit tests for both frontend and backend
+- **Linting**: Enforces code style and catches potential issues
+- **Docker Builds**: Verifies that Docker images can be built successfully
+- **Deployment**: Ready to be extended for automated deployments
+
+### Containerization
+- **Docker Compose**: Simplified local development and production deployment
 
 ## Environment Variables
-
-### Backend
-- `PORT`: Port to run the server on (default: 8080)
 
 ### Frontend
 - `VITE_API_BASE`: Base URL for API requests (default: `http://localhost:8080`)
 
-## Development
 
 ### Running Tests
 
 #### Backend Tests
 ```bash
-cd backend
+cd backend/internal/service
 go test ./...
-```
-
-### Linting
-
-#### Frontend
-```bash
-cd frontend
-npm run lint
 ```
 
 ## API Endpoints
 
 | Method | Endpoint       | Description |
-|---------|----------------|-------------|
-| POST    | `/upload`      | Upload a CSV file containing transaction data |
-| GET     | `/balance`     | Get the total account balance (credits - debits for successful transactions) |
-| GET     | `/issues`      | Get a paginated list of non-successful transactions (FAILED and PENDING) |
+|--------|----------------|-------------|
+| POST   | `/upload`      | Upload a CSV file containing transaction data |
+| GET    | `/balance`     | Get the total account balance |
+| GET    | `/issues`      | Get paginated list of transactions with issues |
 
+## Deployment
 
+### Production with Docker Compose
+
+1. Update environment variables in `docker-compose.yml` if needed
+2. Run:
+   ```bash
+   docker-compose -f docker-compose.yml up --build -d
+   ```
