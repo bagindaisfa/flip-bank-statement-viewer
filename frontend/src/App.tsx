@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef  } from "react";
 import TransactionTable from "./components/TransactionTable";
 import "./App.css";
 
@@ -14,6 +14,7 @@ type Txn = {
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8080";
 
 function App() {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [balance, setBalance] = useState<number | null>(null);
   const [transactions, setTransactions] = useState<Txn[]>([]);
@@ -35,9 +36,9 @@ function App() {
       const balanceData = await balanceRes.json();
       const txnData = await txnRes.json();
       
-      setBalance(balanceData.balance);
-      setTransactions(txnData.items);
-      setTotal(txnData.total);
+      setBalance(balanceData.data.balance);
+      setTransactions(txnData.data.items);
+      setTotal(txnData.data.total);
     } catch (error) {
       console.error("Error fetching data:", error);
       setBalance(null);
@@ -70,6 +71,11 @@ function App() {
       
       alert("Upload berhasil");
       setFile(null);
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      
       await fetchData(); // Refresh both balance and transactions
     } catch (error) {
       alert(error instanceof Error ? error.message : "Terjadi kesalahan saat upload");
@@ -77,6 +83,18 @@ function App() {
       setLoading(false);
     }
   };
+
+  const formatCurrencyMaybe = (value: number | string | null | undefined): string => {
+    if (value === null || value === undefined) return "—";
+
+  const num = Number(value);
+    if (Number.isNaN(num) || !Number.isFinite(num)) return "—";
+
+    return new Intl.NumberFormat("id-ID", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(num);
+  }
 
   return (
     <div className="container">
@@ -90,6 +108,7 @@ function App() {
         </div>
         <div className="flex gap-3 items-center">
           <input
+            ref={fileInputRef}
             type="file"
             accept=".csv"
             onChange={(e) => setFile(e.target.files?.[0] || null)}
@@ -109,7 +128,7 @@ function App() {
       <div className="card">
         <h2 className="card-title">Saldo: 
           <span className="font-semibold">
-            {balance !== null ? `Rp${balance.toLocaleString('id-ID')}` : 'Loading...'}
+            {balance !== null ? `Rp${formatCurrencyMaybe(balance)}` : 'Loading...'}
           </span>
         </h2>
       </div>
