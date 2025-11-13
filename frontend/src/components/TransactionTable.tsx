@@ -20,7 +20,7 @@ type TransactionTableProps = {
 };
 
 export default function TransactionTable({
-  transactions,
+  transactions = [],
   loading,
   page,
   total,
@@ -47,7 +47,14 @@ export default function TransactionTable({
   };
 
   const formatDate = (timestamp: number) => {
-    return new Date(timestamp * 1000).toLocaleString("id-ID", {
+    if (!timestamp || isNaN(timestamp)) {
+      return "-";
+    }
+    const date = new Date(Number(timestamp) * 1000);
+    if (isNaN(date.getTime())) {
+      return "-";
+    }
+    return date.toLocaleString("id-ID", {
       day: "2-digit",
       month: "short",
       year: "numeric",
